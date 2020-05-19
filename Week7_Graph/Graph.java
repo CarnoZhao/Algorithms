@@ -21,6 +21,7 @@ public class Graph {
     }
 
     public Iterable<Integer> adj(int i) {
+        if (!dic.containsKey(i)) return new HashSet<>();
         return dic.get(i);
     }
 
@@ -63,9 +64,8 @@ public class Graph {
     public Iterable<Integer> depthFirstSearch(int x) {
         Stack<Integer> st = new Stack<>();
         st.push(x);
-        HashMap<Integer, Boolean> vis = new HashMap<>();
-        for (int i: dic.keySet()) vis.put(i, false);
-        vis.put(x, true);
+        HashSet<Integer> vis = new HashSet<>();
+        vis.add(x);
         return new Iterable<Integer>(){
             @Override
             public Iterator<Integer> iterator() {
@@ -77,9 +77,9 @@ public class Graph {
 
                     public Integer next() {
                         Integer ret = st.pop();
-                        for (int nex: dic.get(ret)) if (!vis.get(nex)) {
+                        for (int nex: adj(ret)) if (!vis.contains(nex)) {
                             st.push(nex);
-                            vis.put(nex, true);
+                            vis.add(nex);
                         }
                         return ret;
                     }
@@ -92,7 +92,6 @@ public class Graph {
         Queue<Integer> st = new LinkedList<>();
         st.add(x);
         HashMap<Integer, Boolean> vis = new HashMap<>();
-        for (int i: dic.keySet()) vis.put(i, false);
         vis.put(x, true);
         return new Iterable<Integer>(){
             @Override
@@ -105,7 +104,7 @@ public class Graph {
 
                     public Integer next() {
                         Integer ret = st.remove();
-                        for (int nex: dic.get(ret)) if (!vis.get(nex)) {
+                        for (int nex: adj(ret)) if (!vis.containsKey(nex) || !vis.get(nex)) {
                             st.add(nex);
                             vis.put(nex, true);
                         }
@@ -154,7 +153,7 @@ public class Graph {
     public static void main(String[] args) {
         Graph g = new Graph();
         try {
-            BufferedReader in = new BufferedReader(new FileReader(".\\Week7_Graph\\test.txt"));
+            BufferedReader in = new BufferedReader(new FileReader(".\\Week7_Graph\\test1.txt"));
             String line;
             String[] fields;
             while ((line = in.readLine()) != null) {
