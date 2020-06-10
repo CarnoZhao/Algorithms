@@ -1,0 +1,10 @@
+add shell 1
+add shore 2
+add she 3
+add by 4
+get she
+get shells
+get b
+get shell
+remove shore
+get shore
